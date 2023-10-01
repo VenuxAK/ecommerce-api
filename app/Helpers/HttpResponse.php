@@ -6,12 +6,20 @@ trait HttpResponse
 {
     use HttpStatusConverter;
 
-    protected function success($data = [], $code = 200)
+    protected function success($data = [], $code = 200, $name = "data")
     {
         return response()->json([
             "status_code" => $code,
             "status_text" => $this->codeToText($code),
-            "data" => $data
+            $name => $data
+        ], $code);
+    }
+
+    protected function responseStatus($code)
+    {
+        return response()->json([
+            "status_code" => $code,
+            "status_text" => $this->codeToText($code),
         ], $code);
     }
 

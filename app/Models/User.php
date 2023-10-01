@@ -52,4 +52,9 @@ class User extends Authenticatable
             set: fn (String $value) => Hash::make($value)
         );
     }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }
