@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Helpers\HttpResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Products\StoreProductRequest;
-use App\Http\Resources\ProductResource;
+use App\Http\Resources\Products\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;

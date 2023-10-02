@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\v1\CategoryController;
 use App\Http\Controllers\Api\v1\ProductsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -36,5 +37,13 @@ Route::prefix('v1')->group(function () {
         Route::patch("/products/{slug}/update", "update");
         Route::put("/products/{slug}/update", "update");
         Route::delete("products/{slug}/destroy", "destroy");
+    });
+    Route::controller(CategoryController::class)->group(function () {
+        Route::get("/categories", "index");
+        Route::get("/categories/{slug}", "show");
+        Route::post("/categories", "store");
+        Route::patch("/categories/{slug}/update", "update");
+        Route::put("/categories/{slug}/update", "update");
+        Route::delete("/categories/{slug}", "destroy");
     });
 });
