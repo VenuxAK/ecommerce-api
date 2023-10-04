@@ -25,7 +25,9 @@ class ProductsController extends Controller
     public function index()
     {
         return $this->success(
-            ProductResource::collection(Product::with('category')->orderBy('id', 'desc')->get()),
+            ProductResource::collection(
+                Product::with('category')->filter(request(["search", "min_price", "max_price"]))->orderBy('id', 'desc')->get()
+            ),
             200,
             "products"
         );
