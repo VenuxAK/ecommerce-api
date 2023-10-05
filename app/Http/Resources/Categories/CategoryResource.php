@@ -18,24 +18,13 @@ class CategoryResource extends JsonResource
             "name" => $this->name,
             "slug" => $this->slug,
             "description" => $this->description,
-            "products" => $this->products->map(function ($product) {
+            "types" => $this->productTypes->map(function ($type) {
                 return [
-                    "name" => $product->name,
-                    "slug" => $product->slug,
-                    "description" => $product->description,
-                    "price" => $product->price,
-                    "stock_quantity" => $product->stock_quantity,
+                    "name" => $type->name,
+                    "slug" => $type->slug,
+                    // "product_count" => count($type->products)
                 ];
             })
-            // "products" => array_map(function ($product) {
-            //     return [
-            //         "name" => $product->name,
-            //         "slug" => $product->slug,
-            //         "description" => $product->description,
-            //         "price" => $product->price,
-            //         "stock_quantity" => $product->stock_quantity,
-            //     ];
-            // }, $this->products)
         ];
     }
 }

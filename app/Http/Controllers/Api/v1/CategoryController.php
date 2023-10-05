@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\v1;
 use App\Helpers\HttpResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Categories\StoreCategoryRequest;
-use App\Http\Resources\Categories\CategoriesResource;
 use App\Http\Resources\Categories\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -24,7 +23,12 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return $this->success(CategoriesResource::collection(Category::with('products')->latest()->get()), 200, "categories");
+        return $this->success(
+            CategoryResource::collection(Category::with('productTypes')->get()),
+            200,
+            "categories"
+        );
+        // return $this->success(CategoriesResource::collection(Category::with('products')->latest()->get()), 200, "categories");
     }
 
     /**
@@ -104,8 +108,10 @@ class CategoryController extends Controller
         if (!$category) {
             return $this->failed("Category Not Found", 404);
         }
+        if (count($category->productTypes) > 0) {
+            return $this->failed("You can't delete this category.", 406);
+        }
         $category->delete();
-
         return $this->responseStatus(204);
     }
 }

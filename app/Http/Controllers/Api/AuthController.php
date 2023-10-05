@@ -7,6 +7,7 @@ use App\Helpers\UserCookie;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Cookie;
 
@@ -36,7 +37,7 @@ class AuthController extends Controller
 
         // Response Success
         return $this->success([
-            "user" => $user,
+            "user" => new UserResource($user),
             "token" => $token,
             "expired_at" => $token_exp_time->diffForHumans()
         ], 200)->withCookie($cookie);
@@ -64,7 +65,7 @@ class AuthController extends Controller
 
         // Response success
         return $this->success([
-            "user" => $user,
+            "user" => new UserResource($user),
             "token" => $token,
             "expired_at" => $token_exp_time->diffForHumans()
         ], 200)->withCookie($cookie);

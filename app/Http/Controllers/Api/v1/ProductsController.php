@@ -26,7 +26,7 @@ class ProductsController extends Controller
     {
         return $this->success(
             ProductResource::collection(
-                Product::with('category')->filter(request(["search", "min_price", "max_price"]))->orderBy('id', 'desc')->get()
+                Product::with('productType')->filter(request(["search", "min_price", "max_price"]))->orderBy('id', 'desc')->get()
             ),
             200,
             "products"
@@ -38,7 +38,7 @@ class ProductsController extends Controller
      */
     // public function create()
     // {
-    //     // return $this->failed("Request not found", 404);
+    //     //
     // }
 
     /**
@@ -46,15 +46,15 @@ class ProductsController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        $product = Product::create([
+        Product::create([
             "name" => $request->name,
             "slug" => str()->slug($request->name),
             "description" => $request->description ?? NULL,
             "price" => $request->price,
             "stock_quantity" => $request->stock_quantity,
-            "category_id" => $request->category_id
+            "product_type_id" => $request->product_type_id
         ]);
-        return $this->success(new ProductResource($product), 201, "product");
+        return $this->responseStatus(201);
     }
 
     /**
@@ -94,9 +94,9 @@ class ProductsController extends Controller
             "description" => [],
             "price" => ["numeric"],
             "stock_quantity" => ["numeric"],
-            "category_id" => ["numeric", Rule::exists('categories', 'id')]
+            "product_type_id" => ["numeric", Rule::exists('product_types', 'id')]
         ], [
-            "category_id.exists" => "The selected category doesn't exist."
+            "product_type_id.exists" => "The selected product type doesn't exist."
         ]);
         $product = $product->update([
             "name" => $request->name ?? $product->name,
@@ -104,7 +104,7 @@ class ProductsController extends Controller
             "description" => $request->description ?? $product->description,
             "price" => $request->price ?? $product->price,
             "stock_quantity" => $request->stock_quantity ?? $product->stock_quantity,
-            "category_id" => $request->category_id ?? $product->category_id,
+            "product_type_id" => $request->product_type_id ?? $product->product_type_id,
         ]);
 
         return $this->responseStatus(201);
@@ -121,12 +121,5 @@ class ProductsController extends Controller
         }
         $product->delete();
         return $this->responseStatus(204);
-    }
-
-    private function findProduct($product)
-    {
-        if (!$product) {
-            return $this->failed("Product Not Found", 404);
-        }
     }
 }

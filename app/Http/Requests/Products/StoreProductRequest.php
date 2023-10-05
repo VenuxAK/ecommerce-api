@@ -37,8 +37,8 @@ class StoreProductRequest extends FormRequest
             "stock_quantity" => [
                 "required", "numeric"
             ],
-            "category_id" => [
-                "required", "numeric", Rule::exists('categories', 'id')
+            "product_type_id" => [
+                "required", "numeric", Rule::exists('product_types', 'id')
             ]
         ];
     }
@@ -46,8 +46,8 @@ class StoreProductRequest extends FormRequest
     public function messages()
     {
         return [
-            "name.unique" => "The selected name has already used.",
-            "category_id.exists" => "The selected category doesn't exist."
+            "name.unique" => "The selected name has already been used.",
+            "product_type_id.exists" => "The selected product type doesn't exist."
         ];
     }
 }

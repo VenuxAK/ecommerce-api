@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Categories;
+namespace App\Http\Requests\ProductTypes;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreCategoryRequest extends FormRequest
+class StoreProductTypeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,16 +24,20 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             "name" => [
-                "required", "string", "min:3", "max:255", Rule::unique("categories", "name")
+                "required", "string", "min:3", "max:255", Rule::unique('product_types', 'name')
             ],
-            "description" => []
+            "category_id" => [
+                "required", "numeric", Rule::exists('categories', 'id')
+            ]
         ];
     }
 
     public function messages()
     {
         return [
-            "name.unique" => "The selected name has already been used."
+            "name.unique" => "The selected name has already exists.",
+            "category_id.required" => "The category field is required.",
+            "category_id.exists" => "The selected category doesn't exists."
         ];
     }
 }

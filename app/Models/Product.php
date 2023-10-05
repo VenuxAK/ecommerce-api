@@ -9,7 +9,7 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["name", "slug", "description", "category_id", "price", "stock_quantity"];
+    protected $fillable = ["name", "slug", "description", "product_type_id", "price", "stock_quantity"];
 
 
     public function scopeFilter($query, $filter)
@@ -28,10 +28,16 @@ class Product extends Model
         });
     }
 
-    public function category()
+
+    public function productType()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(ProductType::class);
     }
+
+    // public function category()
+    // {
+    //     return $this->belongsTo(Category::class);
+    // }
 
     public function orderItem()
     {
