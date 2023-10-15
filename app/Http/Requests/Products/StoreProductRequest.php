@@ -22,7 +22,7 @@ class StoreProductRequest extends FormRequest
      */
     public function rules(): array
     {
-        $this->only(['name', 'description', 'price', 'stock_quantity', 'category_id']);
+        $this->only(['name', 'description', 'price', 'stock_quantity', 'category_id', 'images']);
 
         return [
             "name" => [
@@ -39,6 +39,9 @@ class StoreProductRequest extends FormRequest
             ],
             "product_type_id" => [
                 "required", "numeric", Rule::exists('product_types', 'id')
+            ],
+            "images" => [
+                "required"
             ]
         ];
     }

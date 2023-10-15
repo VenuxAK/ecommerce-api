@@ -26,7 +26,8 @@ class StoreCategoryRequest extends FormRequest
             "name" => [
                 "required", "string", "min:3", "max:255", Rule::unique("categories", "name")
             ],
-            "description" => []
+            "description" => [],
+            "thumbnail" => ["required"]
         ];
     }
 

@@ -3,16 +3,18 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Helpers\HttpResponse;
+use App\Helpers\MediaUploadService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Products\StoreProductRequest;
 use App\Http\Resources\Products\ProductResource;
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class ProductsController extends Controller
 {
-    use HttpResponse;
+    use HttpResponse, MediaUploadService;
 
     public function __construct()
     {
@@ -26,7 +28,7 @@ class ProductsController extends Controller
     {
         return $this->success(
             ProductResource::collection(
-                Product::with('productType')->filter(request(["search", "min_price", "max_price"]))->orderBy('id', 'desc')->get()
+                Product::with(['productType', 'images'])->filter(request(["search", "min_price", "max_price"]))->orderBy('id', 'desc')->get()
             ),
             200,
             "products"
@@ -46,15 +48,29 @@ class ProductsController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        Product::create([
-            "name" => $request->name,
-            "slug" => str()->slug($request->name),
-            "description" => $request->description ?? NULL,
-            "price" => $request->price,
-            "stock_quantity" => $request->stock_quantity,
-            "product_type_id" => $request->product_type_id
-        ]);
-        return $this->responseStatus(201);
+        if ($request->hasFile("images")) {
+            if ($this->productImagesUpload($request->file("images"))) {
+                $product = Product::create([
+                    "name" => $request->name,
+                    "slug" => str()->slug($request->name),
+                    "description" => $request->description ?? NULL,
+                    "price" => $request->price,
+                    "stock_quantity" => $request->stock_quantity,
+                    "product_type_id" => $request->product_type_id
+                ]);
+
+                foreach ($request->images as $photo) {
+                    $file = $photo->store("/products", ["disks" => "eStore_images"]);
+                    ProductImage::create([
+                        "image_path" => $file,
+                        "product_id" => $product->id
+                    ]);
+                }
+                return $this->responseStatus(201);
+            } else {
+                return $this->failed(["errors" => "Invalid file format"], 422);
+            }
+        }
     }
 
     /**

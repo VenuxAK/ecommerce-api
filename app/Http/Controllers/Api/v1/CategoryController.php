@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Helpers\HttpResponse;
+use App\Helpers\MediaUploadService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Categories\StoreCategoryRequest;
 use App\Http\Resources\Categories\CategoryResource;
@@ -12,7 +13,7 @@ use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
-    use HttpResponse;
+    use HttpResponse, MediaUploadService;
 
     public function __construct()
     {
@@ -44,13 +45,18 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        Category::create([
-            "name" => $request->name,
-            "slug" => str()->slug($request->name),
-            "description" => $request->description ?? NULL
-        ]);
+        // $thumbnail_path = $request->file("thumbnail")->store("/categories", ["disks", "eStore_images"]);
+        $file = $this->categoryThumbnailUpload($request->file("thumbnail"));
+        if ($file) {
+            Category::create([
+                "name" => $request->name,
+                "slug" => str()->slug($request->name),
+                "thumbnail" => $file,
+                "description" => $request->description ?? NULL
+            ]);
 
-        return $this->responseStatus(201);
+            return $this->responseStatus(201);
+        }
     }
 
     /**

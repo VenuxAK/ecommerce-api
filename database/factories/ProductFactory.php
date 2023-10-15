@@ -21,8 +21,8 @@ class ProductFactory extends Factory
             'name' => $name,
             'slug' => str()->slug($name),
             'description' => fake()->paragraph(2),
-            'price' => fake()->randomFloat(2, 10, 200),
-            'stock_quantity' => fake()->numberBetween(10, 100),
+            'price' => fake()->randomFloat(2, 10, 100, 500, 1000),
+            'stock_quantity' => fake()->numberBetween(5, 50),
             'product_type_id' => fake()->numberBetween(1, 20),
         ];
     }

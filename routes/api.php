@@ -14,17 +14,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/get-token', function (Request $request) {
     $token = $request->cookie('token');
-
-    if ($token) {
+    if (!$token) {
         return response()->json([
-            "status_code" => 200,
-            "status_text" => "OK",
-            "token" => $token,
-        ], 200);
+            "message" => "Unauthenticated"
+        ]);
     }
     return response()->json([
-        "message" => "Unauthenticated"
-    ]);
+        "status_code" => 200,
+        "status_text" => "OK",
+        "token" => $token,
+    ], 200);
 });
 Route::post("/auth/register", [AuthController::class, "register"]);
 Route::post("/auth/login", [AuthController::class, "login"]);
