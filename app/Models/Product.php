@@ -14,6 +14,15 @@ class Product extends Model
 
     public function scopeFilter($query, $filter)
     {
+        $query->when($filter["latest"] ?? false, function ($query, $limit) {
+            $query->orderBy("created_at", "desc")->limit($limit);
+        });
+        $query->when($filter["recommanded"] ?? false, function ($query, $recommanded) {
+            $query->inRandomOrder()->limit($recommanded);
+        });
+        $query->when($filter["related"] ?? false, function ($query, $related) {
+            $query->where("product_type_id", $related);
+        });
         $query->when($filter["search"] ?? false, function ($query, $search) {
             $query->where(function ($query) use ($search) {
                 $query->where("name", "LIKE", "%" . $search . "%")
@@ -25,6 +34,16 @@ class Product extends Model
         });
         $query->when($filter["max_price"] ?? false, function ($query, $max_price) {
             $query->where("price", "<=", $max_price);
+        });
+        $query->when($filter["price"] ?? false, function ($query, $price) {
+            if ($price == "low") {
+                $query->orderBy("price", "asc");
+            } elseif ($price == "high") {
+                $query->orderBy("price", "desc");
+            }
+        });
+        $query->when($filter["limit"] ?? false, function ($query, $limit) {
+            $query->limit($limit);
         });
     }
 

@@ -23,13 +23,17 @@ class AuthController extends Controller
     public function register(StoreUserRequest $request)
     {
         // Accept only [name, email, password]
-        $request->only(["name", "email", "password"]);
+        $request->only(["name", "username", "email", "password", "address", "phone_no"]);
 
         // Create user
         $user = User::create([
             "name" => $request->name,
+            "username" => $request->username,
             "email" => $request->email,
-            "password" => $request->password
+            "password" => $request->password,
+            "address" => $request->address ?? NULL,
+            "phone_no" => $request->phone_no ?? NULL,
+            "role_id" => 1
         ]);
 
         // Create cookie

@@ -22,9 +22,15 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
+        'role_id',
         'password',
+        'address',
+        'phone_no',
     ];
+
+    protected $with = ['role'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -51,6 +57,11 @@ class User extends Authenticatable
         return Attribute::make(
             set: fn (String $value) => Hash::make($value)
         );
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, "role_id");
     }
 
     public function orders()

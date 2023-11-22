@@ -22,7 +22,7 @@ class StoreProductRequest extends FormRequest
      */
     public function rules(): array
     {
-        $this->only(['name', 'description', 'price', 'stock_quantity', 'category_id', 'images']);
+        $this->only(['name', 'description', 'price', 'stock_quantity', 'product_type_id', 'images']);
 
         return [
             "name" => [
@@ -50,7 +50,8 @@ class StoreProductRequest extends FormRequest
     {
         return [
             "name.unique" => "The selected name has already been used.",
-            "product_type_id.exists" => "The selected product type doesn't exist."
+            "product_type_id.required" => "The sub category field can't be empty.",
+            "product_type_id.exists" => "The selected product type doesn't exist.",
         ];
     }
 }

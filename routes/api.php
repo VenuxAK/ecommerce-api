@@ -4,19 +4,22 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\v1\CategoryController;
 use App\Http\Controllers\Api\v1\ProductsController;
 use App\Http\Controllers\Api\v1\ProductTypeController;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+    return ["user" => new UserResource($request->user())];
 });
 
 Route::get('/get-token', function (Request $request) {
     $token = $request->cookie('token');
     if (!$token) {
         return response()->json([
-            "message" => "Unauthenticated"
+            "message" => "Unauthenticated",
+            "status_code" => 401,
+            "status_text" => "unauthenticated"
         ]);
     }
     return response()->json([
@@ -29,6 +32,7 @@ Route::post("/auth/register", [AuthController::class, "register"]);
 Route::post("/auth/login", [AuthController::class, "login"]);
 Route::post("/auth/logout", [AuthController::class, "logout"]);
 
+// Route::prefix('v1')->middleware('throttle:60')->group(function () {
 Route::prefix('v1')->group(function () {
     Route::controller(ProductsController::class)->group(function () {
         Route::get("/products", "index");
@@ -47,11 +51,11 @@ Route::prefix('v1')->group(function () {
         Route::delete("/categories/{slug}/delete", "destroy");
     });
     Route::controller(ProductTypeController::class)->group(function () {
-        Route::get("/types", "index");
-        Route::get("/types/{slug}", "show");
-        Route::post("/types", "store");
-        Route::put("/types/{slug}/update", "update");
-        Route::patch("/types/{slug}/update", "update");
-        Route::delete("/types/{slug}/delete", "destroy");
+        Route::get("/products/types/all", "index");
+        Route::get("/products/types/{slug}", "show");
+        Route::post("/products/types/create", "store");
+        Route::put("/products/types/{slug}/update", "update");
+        Route::patch("/products/types/{slug}/update", "update");
+        Route::delete("/products/types/{slug}/delete", "destroy");
     });
 });

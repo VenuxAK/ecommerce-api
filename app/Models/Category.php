@@ -11,6 +11,17 @@ class Category extends Model
 
     protected $fillable = ["name", "slug", "description", "thumbnail"];
 
+    protected function scopeFilter($query, $filter)
+    {
+        /**
+         *  http://localhost:8000/api/v1/categories?products=10
+         *  categories
+         */
+        $query->when($filter["products"] ?? false, function ($query, $products) {
+            // $query->
+        });
+    }
+
     public function productTypes()
     {
         return $this->hasMany(ProductType::class);

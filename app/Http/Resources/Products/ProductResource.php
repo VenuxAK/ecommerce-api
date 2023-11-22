@@ -22,7 +22,9 @@ class ProductResource extends JsonResource
             "price" => $this->price,
             "stock_quantity" => $this->stock_quantity,
             "product_type" => $this->productType ? $this->productType->name : NULL,
+            "product_type_id" => $this->productType ? $this->productType->id : NULL,
             "category" => $this->productType->category->name,
+            "thumbnail" => url("/storage") . "/" . $this->images[0]->image_path,
             "images" => $this->images->map(function ($img) {
                 return url("/storage") . "/" . $img->image_path;
             })

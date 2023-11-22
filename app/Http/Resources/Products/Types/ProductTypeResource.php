@@ -15,7 +15,10 @@ class ProductTypeResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            "id" => $this->id,
             "type" => $this->name,
+            "category" => $this->category->name,
+            "slug" => $this->slug,
             "products" => $this->products->map(function ($product) {
                 return [
                     "id" => $product->id,
@@ -23,7 +26,10 @@ class ProductTypeResource extends JsonResource
                     "slug" => $product->slug,
                     "description" => $product->description,
                     "price" => $product->price,
-                    "stock_quantity" => $product->stock_quantity
+                    "stock_quantity" => $product->stock_quantity,
+                    "product_type" => $this->name,
+                    "product_type_id" => $this->id,
+                    "thumbnail" => url("/storage") . "/" . $product->images[0]->image_path
                 ];
             })
         ];

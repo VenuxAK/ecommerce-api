@@ -13,6 +13,18 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Category::factory(10)->create(['thumbnail' => 'products/1.jpg']);
+        // $c1 = "Electronic's Accessories";
+        // $c2 = "Men's Fashion";
+        // $c3 = "Women's Fashion";
+        // $c4 = "Kid and Toys";
+        // $c5 = "Networking Devices";
+        $categories = ["Men's Fashion", "Women's Fashion", "Computer", "Mobile", "Electronic's Accessories", "Kid and Toys", "Networking Devices"];
+
+        for ($i = 0; $i < count($categories); $i++) {
+            Category::factory()->create([
+                "name" => $categories[$i],
+                "slug" => str()->slug($categories[$i])
+            ]);
+        }
     }
 }

@@ -28,28 +28,36 @@ class ProductsController extends Controller
     {
         return $this->success(
             ProductResource::collection(
-                Product::with(['productType', 'images'])->filter(request(["search", "min_price", "max_price"]))->orderBy('id', 'desc')->get()
+                Product::with(['productType', 'images'])->filter(request([
+                    "search", "latest", "recommanded", "price","min_price", "max_price", "related", "limit"
+                ]))->get()
             ),
             200,
             "products"
         );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    // public function create()
-    // {
-    //     //
-    // }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreProductRequest $request)
     {
+
         if ($request->hasFile("images")) {
             if ($this->productImagesUpload($request->file("images"))) {
+                // if ($request->file('thumbnail')) {
+                // $file = $request->file('thumbnail');
+                // $extension = $file->getClientOriginalExtension();
+                // $check = in_array($extension, $this->allowedFileExtension);
+                // if (!$check) {
+                //     return $this->failed(["errors" => "Invalid file format"], 422);
+                // }
+                // $file_path = $file->store("/products/thumbnails", ["disks" => "eStore_images"]);
+                // Fix later
+                // thumbnail photo duplicate
+                // "thumbnail" => $file_path,
+                // }
                 $product = Product::create([
                     "name" => $request->name,
                     "slug" => str()->slug($request->name),
@@ -70,6 +78,8 @@ class ProductsController extends Controller
             } else {
                 return $this->failed(["errors" => "Invalid file format"], 422);
             }
+        } else {
+            return $this->success("NO_FILE_FOUND", 200);
         }
     }
 
@@ -86,14 +96,6 @@ class ProductsController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    // public function edit(string $id)
-    // {
-    //     //
-    // }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $slug)
@@ -104,13 +106,13 @@ class ProductsController extends Controller
         }
         $request->validate([
             "name" => [
-                "string", "max:255",
+                "required", "string", "max:255",
                 Rule::unique('products', 'name')->ignore($product->id)
             ],
-            "description" => [],
-            "price" => ["numeric"],
-            "stock_quantity" => ["numeric"],
-            "product_type_id" => ["numeric", Rule::exists('product_types', 'id')]
+            "description" => ["required"],
+            "price" => ["required", "numeric"],
+            "stock_quantity" => ["required", "numeric"],
+            "product_type_id" => ["required", "numeric", Rule::exists('product_types', 'id')]
         ], [
             "product_type_id.exists" => "The selected product type doesn't exist."
         ]);

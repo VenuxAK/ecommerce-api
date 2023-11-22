@@ -24,7 +24,7 @@ class StoreProductTypeRequest extends FormRequest
     {
         return [
             "name" => [
-                "required", "string", "min:3", "max:255", Rule::unique('product_types', 'name')
+                "required", "string", "min:2", "max:255", Rule::unique('product_types', 'name')
             ],
             "category_id" => [
                 "required", "numeric", Rule::exists('categories', 'id')

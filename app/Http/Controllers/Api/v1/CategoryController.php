@@ -22,7 +22,7 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index()     // http://localhost:8000/api/v1/categories?products=10
     {
         return $this->success(
             CategoryResource::collection(Category::with('productTypes')->get()),
