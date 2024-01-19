@@ -18,7 +18,6 @@ class CategoryResource extends JsonResource
             "id" => $this->id,
             "name" => $this->name,
             "slug" => $this->slug,
-            "thumbnail" => url("/storage") . "/" .  $this->thumbnail,
             "description" => $this->description,
             "types" => $this->productTypes->map(function ($type) {
                 return [

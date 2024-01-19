@@ -6,7 +6,7 @@ use App\Models\ProductImage;
 
 trait MediaUploadService
 {
-    protected $allowedFileExtension = ["jpg", "png", "jpeg", "webp"];
+    private $allowedFileExtension = ["jpg", "png", "jpeg", "webp"];
 
     protected function productImagesUpload(array $files)
     {
