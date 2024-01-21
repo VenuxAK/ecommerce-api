@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,11 +11,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        $this->call([
+            /** First create your own 10 category with thumbnail */
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+            /** First Run */
+            // CategorySeeder::class,
+            // ProductTypeSeeder::class,
+
+            /** Second Run */
+            // RoleSeeder::class,
+            // User::factory(5)->create(),
+
+            /** Third Run */
+            // OrderItemSeeder::class,
+            // OrderSeeder::class,
+        ]);
     }
 }
