@@ -1,12 +1,15 @@
 <?php
 
+use App\Http\Controllers\Api\Auth\LoginUserController;
+use App\Http\Controllers\Api\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
-use App\Http\Controllers\Api\AuthController;
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return ["user" => new UserResource($request->user())];
+Route::middleware(['auth.api.admin'])->get('/user', function (Request $request) {
+    return response()->json([
+        "user" => new UserResource($request->user)
+    ]);
 });
 
 Route::get('/get-token', function (Request $request) {
@@ -24,6 +27,6 @@ Route::get('/get-token', function (Request $request) {
         "token" => $token,
     ], 200);
 });
-Route::post("/auth/register", [AuthController::class, "register"]);
-Route::post("/auth/login", [AuthController::class, "login"]);
-Route::post("/auth/logout", [AuthController::class, "logout"]);
+Route::post("/auth/register", [RegisteredUserController::class, "store"]);
+Route::post("/auth/login", [LoginUserController::class, "login"]);
+Route::post("/auth/logout", [LoginUserController::class, "logout"]);

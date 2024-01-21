@@ -4,7 +4,6 @@
 use App\Http\Controllers\Api\v1\CategoryController;
 use App\Http\Controllers\Api\v1\ProductsController;
 use App\Http\Controllers\Api\v1\ProductTypeController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__ . "/auth.php";

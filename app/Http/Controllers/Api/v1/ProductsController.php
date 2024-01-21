@@ -18,7 +18,7 @@ class ProductsController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:sanctum')->only(['store', 'update', 'destroy']);
+        $this->middleware(['auth.api.admin'])->only(['store', 'update', 'destroy']);
     }
 
     /**
@@ -29,7 +29,7 @@ class ProductsController extends Controller
         return $this->success(
             ProductResource::collection(
                 Product::with(['productType', 'images'])->filter(request([
-                    "search", "latest", "recommanded", "price","min_price", "max_price", "related", "limit"
+                    "search", "latest", "recommanded", "price", "min_price", "max_price", "related", "limit"
                 ]))->get()
             ),
             200,
