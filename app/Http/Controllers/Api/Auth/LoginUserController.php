@@ -16,7 +16,7 @@ class LoginUserController extends Controller
 
     public function __construct()
     {
-        return $this->middleware('auth:sanctum');
+        return $this->middleware('auth:sanctum')->only('logout');
     }
 
     public function login(LoginUserRequest $request)

@@ -22,8 +22,8 @@ class AdminMiddleware
         // Attempt to authenticate the user using Sanctum
         if (!$token) {
             return response()->json([
-                "message" => "You are not authorized to make this request"
-            ], 403);
+                "message" => "Unauthenticated!"
+            ], 401);
         }
 
         // Use Sanctum's token model to authenticate the user
@@ -32,7 +32,7 @@ class AdminMiddleware
         // Check if the user is authenticated
         if (!$user) {
             return response()->json([
-                "message" => "You are not authorized to make this request"
+                "message" => "Token Expired!"
             ], 403);
         }
 
@@ -42,7 +42,7 @@ class AdminMiddleware
             return $next($request);
         }
         return response()->json([
-            "message" => "You are not authorized to make this request"
+            "message" => "You are not authorized to make this request."
         ], 403);
     }
 }
